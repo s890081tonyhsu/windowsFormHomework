@@ -32,6 +32,7 @@
             this.poolBaseTitle = new System.Windows.Forms.Label();
             this.poolBackButton = new System.Windows.Forms.Button();
             this.poolBackPanel = new System.Windows.Forms.Panel();
+            this.angleValue = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.poolBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -46,12 +47,13 @@
             this.poolPanel.Size = new System.Drawing.Size(783, 384);
             this.poolPanel.TabIndex = 0;
             this.poolPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.poolPanel_Paint);
+            this.poolPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mouse_click);
             // 
             // poolBaseTitle
             // 
             this.poolBaseTitle.AutoSize = true;
             this.poolBaseTitle.BackColor = System.Drawing.Color.Transparent;
-            this.poolBaseTitle.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.poolBaseTitle.Font = new System.Drawing.Font("Microsoft JhengHei", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.poolBaseTitle.Location = new System.Drawing.Point(64, 24);
             this.poolBaseTitle.Name = "poolBaseTitle";
             this.poolBaseTitle.Size = new System.Drawing.Size(0, 31);
@@ -59,7 +61,7 @@
             // 
             // poolBackButton
             // 
-            this.poolBackButton.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.poolBackButton.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.poolBackButton.Location = new System.Drawing.Point(808, 16);
             this.poolBackButton.Name = "poolBackButton";
             this.poolBackButton.Size = new System.Drawing.Size(81, 34);
@@ -71,6 +73,7 @@
             // poolBackPanel
             // 
             this.poolBackPanel.BackColor = System.Drawing.Color.Transparent;
+            this.poolBackPanel.Controls.Add(this.angleValue);
             this.poolBackPanel.Controls.Add(this.pictureBox1);
             this.poolBackPanel.Controls.Add(this.poolPanel);
             this.poolBackPanel.Controls.Add(this.poolBaseTitle);
@@ -79,6 +82,15 @@
             this.poolBackPanel.Name = "poolBackPanel";
             this.poolBackPanel.Size = new System.Drawing.Size(920, 512);
             this.poolBackPanel.TabIndex = 0;
+            // 
+            // angleValue
+            // 
+            this.angleValue.AutoSize = true;
+            this.angleValue.Location = new System.Drawing.Point(31, 472);
+            this.angleValue.Name = "angleValue";
+            this.angleValue.Size = new System.Drawing.Size(33, 12);
+            this.angleValue.TabIndex = 4;
+            this.angleValue.Text = "label1";
             // 
             // pictureBox1
             // 
@@ -114,5 +126,6 @@
         private System.Windows.Forms.Button poolBackButton;
         private System.Windows.Forms.Panel poolBackPanel;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label angleValue;
     }
 }
