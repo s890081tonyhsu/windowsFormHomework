@@ -19,6 +19,7 @@ namespace WindowsFormsApplication1
             this.AllowTransparency = true;
             Color bgCover = Color.FromArgb(150, 255, 255, 255);
             this.backgroundCover.BackColor = bgCover;
+
         }
         public string accountName = "";
 
@@ -42,9 +43,13 @@ namespace WindowsFormsApplication1
                 MessageBox.Show(err.Message);
             }
         }
-
         private void LoginBase_Load(object sender, EventArgs e)
         {
+        }
+
+        private void leaveButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
