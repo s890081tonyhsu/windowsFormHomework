@@ -96,8 +96,8 @@ namespace WindowsFormsApplication1
             }
             public double angleFromBall(Ball ball)
             {
-                double delta_x = x - ball.x;
-                double delta_y = y - ball.y;
+                double delta_x = ball.x - x;
+                double delta_y = ball.y - y;
                 return Math.Atan2(delta_y, delta_x);
             }
         }
