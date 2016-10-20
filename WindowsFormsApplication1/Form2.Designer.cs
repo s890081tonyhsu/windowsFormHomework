@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.poolPanel = new System.Windows.Forms.Panel();
             this.poolBaseTitle = new System.Windows.Forms.Label();
             this.poolBackButton = new System.Windows.Forms.Button();
             this.poolBackPanel = new System.Windows.Forms.Panel();
-            this.angleValue = new System.Windows.Forms.Label();
+            this.whiteBallValue = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.cueFire_button = new System.Windows.Forms.Button();
+            this.poolTimer = new System.Windows.Forms.Timer(this.components);
+            this.timePause_button = new System.Windows.Forms.Button();
             this.poolBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -53,7 +57,7 @@
             // 
             this.poolBaseTitle.AutoSize = true;
             this.poolBaseTitle.BackColor = System.Drawing.Color.Transparent;
-            this.poolBaseTitle.Font = new System.Drawing.Font("Microsoft JhengHei", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.poolBaseTitle.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.poolBaseTitle.Location = new System.Drawing.Point(64, 24);
             this.poolBaseTitle.Name = "poolBaseTitle";
             this.poolBaseTitle.Size = new System.Drawing.Size(0, 31);
@@ -61,7 +65,7 @@
             // 
             // poolBackButton
             // 
-            this.poolBackButton.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.poolBackButton.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.poolBackButton.Location = new System.Drawing.Point(808, 16);
             this.poolBackButton.Name = "poolBackButton";
             this.poolBackButton.Size = new System.Drawing.Size(81, 34);
@@ -73,24 +77,27 @@
             // poolBackPanel
             // 
             this.poolBackPanel.BackColor = System.Drawing.Color.Transparent;
-            this.poolBackPanel.Controls.Add(this.angleValue);
+            this.poolBackPanel.Controls.Add(this.timePause_button);
+            this.poolBackPanel.Controls.Add(this.cueFire_button);
+            this.poolBackPanel.Controls.Add(this.whiteBallValue);
             this.poolBackPanel.Controls.Add(this.pictureBox1);
             this.poolBackPanel.Controls.Add(this.poolPanel);
             this.poolBackPanel.Controls.Add(this.poolBaseTitle);
             this.poolBackPanel.Controls.Add(this.poolBackButton);
+            this.poolBackPanel.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.poolBackPanel.Location = new System.Drawing.Point(0, 0);
             this.poolBackPanel.Name = "poolBackPanel";
             this.poolBackPanel.Size = new System.Drawing.Size(920, 512);
             this.poolBackPanel.TabIndex = 0;
             // 
-            // angleValue
+            // whiteBallValue
             // 
-            this.angleValue.AutoSize = true;
-            this.angleValue.Location = new System.Drawing.Point(31, 472);
-            this.angleValue.Name = "angleValue";
-            this.angleValue.Size = new System.Drawing.Size(33, 12);
-            this.angleValue.TabIndex = 4;
-            this.angleValue.Text = "label1";
+            this.whiteBallValue.AutoSize = true;
+            this.whiteBallValue.Location = new System.Drawing.Point(31, 472);
+            this.whiteBallValue.Name = "whiteBallValue";
+            this.whiteBallValue.Size = new System.Drawing.Size(51, 19);
+            this.whiteBallValue.TabIndex = 4;
+            this.whiteBallValue.Text = "label1";
             // 
             // pictureBox1
             // 
@@ -102,6 +109,33 @@
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
+            // cueFire_button
+            // 
+            this.cueFire_button.Location = new System.Drawing.Point(596, 466);
+            this.cueFire_button.Name = "cueFire_button";
+            this.cueFire_button.Size = new System.Drawing.Size(96, 31);
+            this.cueFire_button.TabIndex = 5;
+            this.cueFire_button.Text = "はっしゃ";
+            this.cueFire_button.UseVisualStyleBackColor = true;
+            this.cueFire_button.Click += new System.EventHandler(this.cueFire_button_Click);
+            // 
+            // poolTimer
+            // 
+            this.poolTimer.Interval = 25;
+            this.poolTimer.Tick += new System.EventHandler(this.poolTimer_tick);
+            // 
+            // timePause_button
+            // 
+            this.timePause_button.Location = new System.Drawing.Point(703, 466);
+            this.timePause_button.Name = "timePause_button";
+            this.timePause_button.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.timePause_button.Size = new System.Drawing.Size(96, 31);
+            this.timePause_button.TabIndex = 6;
+            this.timePause_button.Text = "ポーズ";
+            this.timePause_button.UseVisualStyleBackColor = true;
+            this.timePause_button.Visible = false;
+            this.timePause_button.Click += new System.EventHandler(this.poolPause_Click);
+            // 
             // PoolBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -112,6 +146,7 @@
             this.Name = "PoolBase";
             this.Text = "撞球館";
             this.Load += new System.EventHandler(this.PoolBase_Load);
+            this.Resize += new System.EventHandler(this.Form2_Resize);
             this.poolBackPanel.ResumeLayout(false);
             this.poolBackPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -126,6 +161,9 @@
         private System.Windows.Forms.Button poolBackButton;
         private System.Windows.Forms.Panel poolBackPanel;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label angleValue;
+        private System.Windows.Forms.Label whiteBallValue;
+        private System.Windows.Forms.Button cueFire_button;
+        private System.Windows.Forms.Timer poolTimer;
+        private System.Windows.Forms.Button timePause_button;
     }
 }
