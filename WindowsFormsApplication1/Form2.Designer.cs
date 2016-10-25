@@ -33,11 +33,11 @@
             this.poolBaseTitle = new System.Windows.Forms.Label();
             this.poolBackButton = new System.Windows.Forms.Button();
             this.poolBackPanel = new System.Windows.Forms.Panel();
+            this.timePause_button = new System.Windows.Forms.Button();
+            this.cueFire_button = new System.Windows.Forms.Button();
             this.whiteBallValue = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.cueFire_button = new System.Windows.Forms.Button();
             this.poolTimer = new System.Windows.Forms.Timer(this.components);
-            this.timePause_button = new System.Windows.Forms.Button();
             this.poolBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -90,6 +90,28 @@
             this.poolBackPanel.Size = new System.Drawing.Size(920, 512);
             this.poolBackPanel.TabIndex = 0;
             // 
+            // timePause_button
+            // 
+            this.timePause_button.Location = new System.Drawing.Point(703, 466);
+            this.timePause_button.Name = "timePause_button";
+            this.timePause_button.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.timePause_button.Size = new System.Drawing.Size(96, 31);
+            this.timePause_button.TabIndex = 6;
+            this.timePause_button.Text = "ポーズ";
+            this.timePause_button.UseVisualStyleBackColor = true;
+            this.timePause_button.Visible = false;
+            this.timePause_button.Click += new System.EventHandler(this.poolPause_Click);
+            // 
+            // cueFire_button
+            // 
+            this.cueFire_button.Location = new System.Drawing.Point(596, 466);
+            this.cueFire_button.Name = "cueFire_button";
+            this.cueFire_button.Size = new System.Drawing.Size(96, 31);
+            this.cueFire_button.TabIndex = 5;
+            this.cueFire_button.Text = "はっしゃ";
+            this.cueFire_button.UseVisualStyleBackColor = true;
+            this.cueFire_button.Click += new System.EventHandler(this.cueFire_button_Click);
+            // 
             // whiteBallValue
             // 
             this.whiteBallValue.AutoSize = true;
@@ -109,32 +131,10 @@
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             // 
-            // cueFire_button
-            // 
-            this.cueFire_button.Location = new System.Drawing.Point(596, 466);
-            this.cueFire_button.Name = "cueFire_button";
-            this.cueFire_button.Size = new System.Drawing.Size(96, 31);
-            this.cueFire_button.TabIndex = 5;
-            this.cueFire_button.Text = "はっしゃ";
-            this.cueFire_button.UseVisualStyleBackColor = true;
-            this.cueFire_button.Click += new System.EventHandler(this.cueFire_button_Click);
-            // 
             // poolTimer
             // 
             this.poolTimer.Interval = 25;
             this.poolTimer.Tick += new System.EventHandler(this.poolTimer_tick);
-            // 
-            // timePause_button
-            // 
-            this.timePause_button.Location = new System.Drawing.Point(703, 466);
-            this.timePause_button.Name = "timePause_button";
-            this.timePause_button.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.timePause_button.Size = new System.Drawing.Size(96, 31);
-            this.timePause_button.TabIndex = 6;
-            this.timePause_button.Text = "ポーズ";
-            this.timePause_button.UseVisualStyleBackColor = true;
-            this.timePause_button.Visible = false;
-            this.timePause_button.Click += new System.EventHandler(this.poolPause_Click);
             // 
             // PoolBase
             // 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace WindowsFormsApplication1
 {
@@ -61,19 +62,34 @@ namespace WindowsFormsApplication1
                 triFunc[1] = Math.Sin(angle);
                 speed = spdHit/40;
             }
-            public void collidedInterrupt(Ball another) // ball to ball
+            public void collideInterrupt(Rectangle poolPanelRec) // wall to ball
+            {
+                if (x < r || x > poolPanelRec.Width - r)
+                {
+                    angle = Math.PI - angle;
+                    x = (x < r) ? (-x + 2 * r) : (-x + 2 * (poolPanelRec.Width - r));
+                    triFunc[0] = Math.Cos(angle);
+                    triFunc[1] = Math.Sin(angle);
+                }
+                if (y < r || y > poolPanelRec.Height - r)
+                {
+                    angle = -angle;
+                    y = (y < r) ? (-y + 2 * r) : (-y + 2 * (poolPanelRec.Height - r));
+                    triFunc[0] = Math.Cos(angle);
+                    triFunc[1] = Math.Sin(angle);
+                }
+            }
+            public void collideInterrupt(Ball another) // ball to ball
             {
 
             }
-            public void collideInterrupt() // wall to ball
-            {
-
-            }
-            public void animation()
+            public void animation(Rectangle poolPanelRec)
             {
                 x = x - speed * triFunc[0];
                 y = y - speed * triFunc[1];
                 speed -= fr;
+                collideInterrupt(poolPanelRec);
+                Console.WriteLine("x: " + x + ", y: " + y + ", angle: " + angle);
             }
         }
         class CuePole // define a cue with a length, angle, but the start point is chosen by the ball or user point
@@ -136,7 +152,7 @@ namespace WindowsFormsApplication1
         private Ball whiteBall = null;
         private CuePole playerCue = null;
         private MousePoint myMouse = null;
-
+        private Rectangle poolPanelRec = new Rectangle();
         public PoolBase()
         {
             InitializeComponent();
@@ -150,17 +166,22 @@ namespace WindowsFormsApplication1
             playerCue = new CuePole(1.5, 100, Color.FromArgb(255, 0, 0, 0));
             myMouse = new MousePoint(-1, -1);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            this.AllowTransparency = true;
+            AllowTransparency = true;
+            poolPanelRec = new Rectangle(0, 0, poolPanel.Width, poolPanel.Height);
             Color bgCover = Color.FromArgb(150, 255, 255, 255);
-            
-            //this.poolBackPanel.BackColor = bgCover;
+            this.poolBackPanel.BackColor = bgCover;
         }
 
         private void PoolBase_Load(object sender, EventArgs e)
         {
             string account = login.accountName;
             poolBaseTitle.Text = "你好阿，旅行者" + account;
+            AllocConsole();
         }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
 
         private void poolBackButton_Click(object sender, EventArgs e)
         {
@@ -175,7 +196,7 @@ namespace WindowsFormsApplication1
             redBall.draw();
             redBall_noBrush.draw_line();
             whiteBall.draw();
-            if(whiteBall.speed == 0) playerCue.draw(whiteBall);
+            if(!poolAnimation) playerCue.draw(whiteBall);
             myMouse.draw_line();
             gBuffer.Render(e.Graphics);
         }
@@ -195,6 +216,7 @@ namespace WindowsFormsApplication1
 
         private void cueFire_button_Click(object sender, EventArgs e)
         {
+            playerCue.mouseClick_Angle(myMouse.angleFromBall(whiteBall));
             whiteBall.collideInterrupt(playerCue, 1000);
             poolAnimation = true;
             poolTimer.Enabled = true;
@@ -202,7 +224,7 @@ namespace WindowsFormsApplication1
 
         private void poolTimer_tick(object sender, EventArgs e)
         {
-            whiteBall.animation();
+            whiteBall.animation(poolPanelRec);
             poolPanel.Refresh();
             if (whiteBall.speed <= 0)
             {
