@@ -38,6 +38,10 @@
             this.whiteBallValue = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.poolTimer = new System.Windows.Forms.Timer(this.components);
+            this.powerScroll = new System.Windows.Forms.VScrollBar();
+            this.frictionScroll = new System.Windows.Forms.HScrollBar();
+            this.frictionLabel = new System.Windows.Forms.Label();
+            this.powerLabel = new System.Windows.Forms.Label();
             this.poolBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -77,6 +81,10 @@
             // poolBackPanel
             // 
             this.poolBackPanel.BackColor = System.Drawing.Color.Transparent;
+            this.poolBackPanel.Controls.Add(this.powerLabel);
+            this.poolBackPanel.Controls.Add(this.frictionLabel);
+            this.poolBackPanel.Controls.Add(this.frictionScroll);
+            this.poolBackPanel.Controls.Add(this.powerScroll);
             this.poolBackPanel.Controls.Add(this.timePause_button);
             this.poolBackPanel.Controls.Add(this.cueFire_button);
             this.poolBackPanel.Controls.Add(this.whiteBallValue);
@@ -87,12 +95,12 @@
             this.poolBackPanel.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.poolBackPanel.Location = new System.Drawing.Point(0, 0);
             this.poolBackPanel.Name = "poolBackPanel";
-            this.poolBackPanel.Size = new System.Drawing.Size(920, 512);
+            this.poolBackPanel.Size = new System.Drawing.Size(932, 539);
             this.poolBackPanel.TabIndex = 0;
             // 
             // timePause_button
             // 
-            this.timePause_button.Location = new System.Drawing.Point(703, 466);
+            this.timePause_button.Location = new System.Drawing.Point(703, 470);
             this.timePause_button.Name = "timePause_button";
             this.timePause_button.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.timePause_button.Size = new System.Drawing.Size(96, 31);
@@ -104,7 +112,7 @@
             // 
             // cueFire_button
             // 
-            this.cueFire_button.Location = new System.Drawing.Point(596, 466);
+            this.cueFire_button.Location = new System.Drawing.Point(596, 470);
             this.cueFire_button.Name = "cueFire_button";
             this.cueFire_button.Size = new System.Drawing.Size(96, 31);
             this.cueFire_button.TabIndex = 5;
@@ -115,7 +123,7 @@
             // whiteBallValue
             // 
             this.whiteBallValue.AutoSize = true;
-            this.whiteBallValue.Location = new System.Drawing.Point(31, 472);
+            this.whiteBallValue.Location = new System.Drawing.Point(481, 31);
             this.whiteBallValue.Name = "whiteBallValue";
             this.whiteBallValue.Size = new System.Drawing.Size(51, 19);
             this.whiteBallValue.TabIndex = 4;
@@ -136,12 +144,52 @@
             this.poolTimer.Interval = 25;
             this.poolTimer.Tick += new System.EventHandler(this.poolTimer_tick);
             // 
+            // powerScroll
+            // 
+            this.powerScroll.Location = new System.Drawing.Point(869, 62);
+            this.powerScroll.Maximum = 150;
+            this.powerScroll.Minimum = 1;
+            this.powerScroll.Name = "powerScroll";
+            this.powerScroll.Size = new System.Drawing.Size(17, 450);
+            this.powerScroll.TabIndex = 7;
+            this.powerScroll.Value = 100;
+            this.powerScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.powerScroll_Scroll);
+            // 
+            // frictionScroll
+            // 
+            this.frictionScroll.Location = new System.Drawing.Point(16, 475);
+            this.frictionScroll.Maximum = 150;
+            this.frictionScroll.Minimum = 1;
+            this.frictionScroll.Name = "frictionScroll";
+            this.frictionScroll.Size = new System.Drawing.Size(450, 17);
+            this.frictionScroll.TabIndex = 8;
+            this.frictionScroll.Value = 32;
+            this.frictionScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.frictionScroll_Scroll);
+            // 
+            // frictionLabel
+            // 
+            this.frictionLabel.AutoSize = true;
+            this.frictionLabel.Location = new System.Drawing.Point(27, 505);
+            this.frictionLabel.Name = "frictionLabel";
+            this.frictionLabel.Size = new System.Drawing.Size(69, 19);
+            this.frictionLabel.TabIndex = 9;
+            this.frictionLabel.Text = "摩擦力：";
+            // 
+            // powerLabel
+            // 
+            this.powerLabel.AutoSize = true;
+            this.powerLabel.Location = new System.Drawing.Point(808, 72);
+            this.powerLabel.Name = "powerLabel";
+            this.powerLabel.Size = new System.Drawing.Size(54, 19);
+            this.powerLabel.TabIndex = 10;
+            this.powerLabel.Text = "施力：";
+            // 
             // PoolBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::WindowsFormsApplication1.Properties.Resources._35239_hyperdimension_neptunia;
-            this.ClientSize = new System.Drawing.Size(916, 504);
+            this.ClientSize = new System.Drawing.Size(927, 533);
             this.Controls.Add(this.poolBackPanel);
             this.Name = "PoolBase";
             this.Text = "撞球館";
@@ -165,5 +213,9 @@
         private System.Windows.Forms.Button cueFire_button;
         private System.Windows.Forms.Timer poolTimer;
         private System.Windows.Forms.Button timePause_button;
+        private System.Windows.Forms.HScrollBar frictionScroll;
+        private System.Windows.Forms.VScrollBar powerScroll;
+        private System.Windows.Forms.Label frictionLabel;
+        private System.Windows.Forms.Label powerLabel;
     }
 }

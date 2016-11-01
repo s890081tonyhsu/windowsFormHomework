@@ -17,6 +17,7 @@ namespace WindowsFormsApplication1
         BufferedGraphicsContext currentContext;
         BufferedGraphics gBuffer;
         public static Graphics g;
+        public static double power = 500;
         public static double fr = 0.8;
         public bool poolAnimation;
         class Ball // define a ball with a position, color and have painter self to draw
@@ -170,6 +171,8 @@ namespace WindowsFormsApplication1
             poolPanelRec = new Rectangle(0, 0, poolPanel.Width, poolPanel.Height);
             Color bgCover = Color.FromArgb(150, 255, 255, 255);
             this.poolBackPanel.BackColor = bgCover;
+            powerLabel.Text = "施力：\n" + power;
+            frictionLabel.Text = "摩擦力：" + fr;
         }
 
         private void PoolBase_Load(object sender, EventArgs e)
@@ -217,7 +220,7 @@ namespace WindowsFormsApplication1
         private void cueFire_button_Click(object sender, EventArgs e)
         {
             playerCue.mouseClick_Angle(myMouse.angleFromBall(whiteBall));
-            whiteBall.collideInterrupt(playerCue, 1000);
+            whiteBall.collideInterrupt(playerCue, power);
             poolAnimation = true;
             poolTimer.Enabled = true;
         }
@@ -233,13 +236,25 @@ namespace WindowsFormsApplication1
             }
             cueFire_button.Visible = !poolAnimation;
             timePause_button.Visible = poolAnimation;
-            whiteBallValue.Text = "( " + whiteBall.x.ToString() + ", " + whiteBall.y.ToString() + ")";
+            whiteBallValue.Text = "Spd: " + whiteBall.speed;
         }
 
         private void poolPause_Click(object sender, EventArgs e)
         {
             poolTimer.Enabled = (!poolTimer.Enabled & poolAnimation);
             timePause_button.Text = poolTimer.Enabled? "ポーズ" : "続けます";
+        }
+
+        private void powerScroll_Scroll(object sender, ScrollEventArgs e)
+        {
+            power = e.NewValue * 5;
+            powerLabel.Text = "施力：\n" + power;
+        }
+
+        private void frictionScroll_Scroll(object sender, ScrollEventArgs e)
+        {
+            fr = e.NewValue / 50.0;
+            frictionLabel.Text = "摩擦力：" + fr;
         }
     }
 }
