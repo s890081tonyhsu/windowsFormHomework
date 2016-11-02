@@ -33,15 +33,15 @@
             this.poolBaseTitle = new System.Windows.Forms.Label();
             this.poolBackButton = new System.Windows.Forms.Button();
             this.poolBackPanel = new System.Windows.Forms.Panel();
+            this.powerLabel = new System.Windows.Forms.Label();
+            this.frictionLabel = new System.Windows.Forms.Label();
+            this.frictionScroll = new System.Windows.Forms.HScrollBar();
+            this.powerScroll = new System.Windows.Forms.VScrollBar();
             this.timePause_button = new System.Windows.Forms.Button();
             this.cueFire_button = new System.Windows.Forms.Button();
             this.whiteBallValue = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.poolTimer = new System.Windows.Forms.Timer(this.components);
-            this.powerScroll = new System.Windows.Forms.VScrollBar();
-            this.frictionScroll = new System.Windows.Forms.HScrollBar();
-            this.frictionLabel = new System.Windows.Forms.Label();
-            this.powerLabel = new System.Windows.Forms.Label();
             this.poolBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -61,7 +61,7 @@
             // 
             this.poolBaseTitle.AutoSize = true;
             this.poolBaseTitle.BackColor = System.Drawing.Color.Transparent;
-            this.poolBaseTitle.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.poolBaseTitle.Font = new System.Drawing.Font("Microsoft JhengHei", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.poolBaseTitle.Location = new System.Drawing.Point(64, 24);
             this.poolBaseTitle.Name = "poolBaseTitle";
             this.poolBaseTitle.Size = new System.Drawing.Size(0, 31);
@@ -69,7 +69,7 @@
             // 
             // poolBackButton
             // 
-            this.poolBackButton.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.poolBackButton.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.poolBackButton.Location = new System.Drawing.Point(808, 16);
             this.poolBackButton.Name = "poolBackButton";
             this.poolBackButton.Size = new System.Drawing.Size(81, 34);
@@ -92,11 +92,51 @@
             this.poolBackPanel.Controls.Add(this.poolPanel);
             this.poolBackPanel.Controls.Add(this.poolBaseTitle);
             this.poolBackPanel.Controls.Add(this.poolBackButton);
-            this.poolBackPanel.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.poolBackPanel.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.poolBackPanel.Location = new System.Drawing.Point(0, 0);
             this.poolBackPanel.Name = "poolBackPanel";
             this.poolBackPanel.Size = new System.Drawing.Size(932, 539);
             this.poolBackPanel.TabIndex = 0;
+            // 
+            // powerLabel
+            // 
+            this.powerLabel.AutoSize = true;
+            this.powerLabel.Location = new System.Drawing.Point(808, 72);
+            this.powerLabel.Name = "powerLabel";
+            this.powerLabel.Size = new System.Drawing.Size(54, 19);
+            this.powerLabel.TabIndex = 10;
+            this.powerLabel.Text = "施力：";
+            // 
+            // frictionLabel
+            // 
+            this.frictionLabel.AutoSize = true;
+            this.frictionLabel.Location = new System.Drawing.Point(27, 505);
+            this.frictionLabel.Name = "frictionLabel";
+            this.frictionLabel.Size = new System.Drawing.Size(69, 19);
+            this.frictionLabel.TabIndex = 9;
+            this.frictionLabel.Text = "摩擦力：";
+            // 
+            // frictionScroll
+            // 
+            this.frictionScroll.Location = new System.Drawing.Point(16, 475);
+            this.frictionScroll.Maximum = 159;
+            this.frictionScroll.Minimum = 1;
+            this.frictionScroll.Name = "frictionScroll";
+            this.frictionScroll.Size = new System.Drawing.Size(459, 17);
+            this.frictionScroll.TabIndex = 8;
+            this.frictionScroll.Value = 40;
+            this.frictionScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.frictionScroll_Scroll);
+            // 
+            // powerScroll
+            // 
+            this.powerScroll.Location = new System.Drawing.Point(869, 62);
+            this.powerScroll.Maximum = 159;
+            this.powerScroll.Minimum = 1;
+            this.powerScroll.Name = "powerScroll";
+            this.powerScroll.Size = new System.Drawing.Size(17, 459);
+            this.powerScroll.TabIndex = 7;
+            this.powerScroll.Value = 50;
+            this.powerScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.powerScroll_Scroll);
             // 
             // timePause_button
             // 
@@ -143,46 +183,6 @@
             // 
             this.poolTimer.Interval = 25;
             this.poolTimer.Tick += new System.EventHandler(this.poolTimer_tick);
-            // 
-            // powerScroll
-            // 
-            this.powerScroll.Location = new System.Drawing.Point(869, 62);
-            this.powerScroll.Maximum = 150;
-            this.powerScroll.Minimum = 1;
-            this.powerScroll.Name = "powerScroll";
-            this.powerScroll.Size = new System.Drawing.Size(17, 450);
-            this.powerScroll.TabIndex = 7;
-            this.powerScroll.Value = 100;
-            this.powerScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.powerScroll_Scroll);
-            // 
-            // frictionScroll
-            // 
-            this.frictionScroll.Location = new System.Drawing.Point(16, 475);
-            this.frictionScroll.Maximum = 150;
-            this.frictionScroll.Minimum = 1;
-            this.frictionScroll.Name = "frictionScroll";
-            this.frictionScroll.Size = new System.Drawing.Size(450, 17);
-            this.frictionScroll.TabIndex = 8;
-            this.frictionScroll.Value = 32;
-            this.frictionScroll.Scroll += new System.Windows.Forms.ScrollEventHandler(this.frictionScroll_Scroll);
-            // 
-            // frictionLabel
-            // 
-            this.frictionLabel.AutoSize = true;
-            this.frictionLabel.Location = new System.Drawing.Point(27, 505);
-            this.frictionLabel.Name = "frictionLabel";
-            this.frictionLabel.Size = new System.Drawing.Size(69, 19);
-            this.frictionLabel.TabIndex = 9;
-            this.frictionLabel.Text = "摩擦力：";
-            // 
-            // powerLabel
-            // 
-            this.powerLabel.AutoSize = true;
-            this.powerLabel.Location = new System.Drawing.Point(808, 72);
-            this.powerLabel.Name = "powerLabel";
-            this.powerLabel.Size = new System.Drawing.Size(54, 19);
-            this.powerLabel.TabIndex = 10;
-            this.powerLabel.Text = "施力：";
             // 
             // PoolBase
             // 

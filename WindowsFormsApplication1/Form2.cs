@@ -17,8 +17,8 @@ namespace WindowsFormsApplication1
         BufferedGraphicsContext currentContext;
         BufferedGraphics gBuffer;
         public static Graphics g;
-        public static double power = 500;
-        public static double fr = 0.8;
+        public static double power = 600;
+        public static double fr = 0.4;
         public bool poolAnimation;
         class Ball // define a ball with a position, color and have painter self to draw
         {
@@ -247,13 +247,13 @@ namespace WindowsFormsApplication1
 
         private void powerScroll_Scroll(object sender, ScrollEventArgs e)
         {
-            power = e.NewValue * 5;
+            power = e.NewValue * 12;
             powerLabel.Text = "施力：\n" + power;
         }
 
         private void frictionScroll_Scroll(object sender, ScrollEventArgs e)
         {
-            fr = e.NewValue / 50.0;
+            fr = e.NewValue / 100.0;
             frictionLabel.Text = "摩擦力：" + fr;
         }
     }
