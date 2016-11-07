@@ -19,7 +19,10 @@ namespace WindowsFormsApplication1
         public static Graphics g;
         public static double power = 600;
         public static double fr = 0.4;
+        public double d_pow_min = 0;
         public bool poolAnimation;
+        public bool wantToDraw;
+        public bool collideFlag;
         class Ball // define a ball with a position, color and have painter self to draw
         {
             public double x;
@@ -53,8 +56,23 @@ namespace WindowsFormsApplication1
             }
             public void draw_line()
             {
-
                 g.DrawEllipse(pe, (Int32)(x - r), (Int32)(y - r), (Int32)(r * 2), (Int32)(r * 2));
+            }
+            public void draw_collide_line(bool wantToDraw)
+            {
+                if (!wantToDraw) return;
+                Pen pe = new Pen(Color.Orange, 1);
+                Point start = new Point((Int32)(x), (Int32)(y));
+                Point end = new Point((Int32)(x + r * Math.Cos(angle) - 10 * r * Math.Cos(angle)), (Int32)(y - 10 * r * Math.Sin(angle)));
+                g.DrawLine(pe, start, end);
+            }
+            public void draw_bary_line(Ball another, bool wantToDraw)
+            {
+                if (!wantToDraw) return;
+                Pen pe = new Pen(Color.Yellow, 1);
+                Point start = new Point((Int32)(x), (Int32)(y));
+                Point end = new Point((Int32)(x + 10 * (another.x - x)), (Int32)(y + 10 * (another.y - y)));
+                g.DrawLine(pe, start, end);
             }
             public void collideInterrupt(CuePole hitter, double spdHit) // cue to ball
             {
@@ -80,9 +98,15 @@ namespace WindowsFormsApplication1
                     triFunc[1] = Math.Sin(angle);
                 }
             }
-            public void collideInterrupt(Ball another) // ball to ball
+            public bool collideInterrupt(Ball another, double d_pow_min) // ball to ball
             {
-
+                double d_pow = Math.Pow(x - another.x, 2.0) + Math.Pow(y - another.y, 2.0);
+                if (d_pow < d_pow_min)
+                {
+                    Console.WriteLine("Ball Collide Event!!");
+                    return true;
+                }
+                return false;
             }
             public void animation(Rectangle poolPanelRec)
             {
@@ -161,7 +185,10 @@ namespace WindowsFormsApplication1
             gBuffer = currentContext.Allocate(this.poolPanel.CreateGraphics(), new Rectangle(0, 0, this.poolPanel.Width, this.poolPanel.Height));
             g = gBuffer.Graphics;
             poolAnimation = false;
-            redBall = new Ball(30, 30, 10, Color.FromArgb(255, 255, 0, 0));
+            wantToDraw = false;
+            collideFlag = false;
+            d_pow_min = (double)(4 * 10 * 10);
+            redBall = new Ball(300, 300, 10, Color.FromArgb(255, 255, 0, 0));
             redBall_noBrush = new Ball(100, 100, 10, Color.FromArgb(255, 255, 0, 0));
             whiteBall = new Ball(100, 100, 10, Color.FromArgb(255, 255, 255, 255));
             playerCue = new CuePole(1.5, 100, Color.FromArgb(255, 0, 0, 0));
@@ -199,6 +226,11 @@ namespace WindowsFormsApplication1
             redBall.draw();
             redBall_noBrush.draw_line();
             whiteBall.draw();
+            if (collideFlag) 
+            {
+                whiteBall.draw_collide_line(wantToDraw);
+                whiteBall.draw_bary_line(redBall, wantToDraw);
+            }
             if(!poolAnimation) playerCue.draw(whiteBall);
             myMouse.draw_line();
             gBuffer.Render(e.Graphics);
@@ -228,7 +260,13 @@ namespace WindowsFormsApplication1
         private void poolTimer_tick(object sender, EventArgs e)
         {
             whiteBall.animation(poolPanelRec);
+            redBall.animation(poolPanelRec);
+            collideFlag = whiteBall.collideInterrupt(redBall, d_pow_min);
             poolPanel.Refresh();
+            if (collideFlag & wantToDraw) 
+            {
+                poolTimer.Enabled = false;
+            }
             if (whiteBall.speed <= 0)
             {
                 poolTimer.Enabled = false;
@@ -255,6 +293,11 @@ namespace WindowsFormsApplication1
         {
             fr = e.NewValue / 100.0;
             frictionLabel.Text = "摩擦力：" + fr;
+        }
+
+        private void ballCollideStop_CheckedChanged(object sender, EventArgs e)
+        {
+            wantToDraw = ballCollideStop.Checked;
         }
     }
 }
