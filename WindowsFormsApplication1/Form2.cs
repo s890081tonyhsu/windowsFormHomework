@@ -40,6 +40,7 @@ namespace WindowsFormsApplication1
                 y = y_i;
                 r = r_i;
                 angle = 0;
+                speed = 0;
                 triFunc = new double[2] { 0, 0};
                 color = color_i;
                 br = new SolidBrush(color);
@@ -49,6 +50,13 @@ namespace WindowsFormsApplication1
             {
                 x = x_n;
                 y = y_n;
+            }
+            public void setAngleSpeed(double angle_n, double speed_n)
+            {
+                angle = angle_n;
+                speed = speed_n;
+                triFunc[0] = Math.Cos(angle);
+                triFunc[1] = Math.Sin(angle);
             }
             public void draw()
             {
@@ -98,23 +106,39 @@ namespace WindowsFormsApplication1
                     triFunc[1] = Math.Sin(angle);
                 }
             }
-            public bool collideInterrupt(Ball another, double d_pow_min) // ball to ball
+            public bool collideDetect(Ball another, double d_pow_min)
             {
                 double d_pow = Math.Pow(x - another.x, 2.0) + Math.Pow(y - another.y, 2.0);
                 if (d_pow < d_pow_min)
                 {
-                    Console.WriteLine("Ball Collide Event!!");
+                    Console.WriteLine("Ball Collide Detected!!");
                     return true;
                 }
                 return false;
             }
-            public void animation(Rectangle poolPanelRec)
+            public void collideInterrupt(Ball another, double d_pow_min) // ball to ball
             {
-                x = x - speed * triFunc[0];
-                y = y - speed * triFunc[1];
-                speed -= fr;
+                double d_pow = Math.Pow(x - another.x, 2.0) + Math.Pow(y - another.y, 2.0);
+                double centroid_angle = Math.Atan2(another.y - y, another.x - x);
+                double[] parallel_speed = new double[] { another.speed * Math.Cos(another.angle - centroid_angle), speed * Math.Cos(angle - centroid_angle) };
+                double[] vertical_speed = new double[] { speed * Math.Sin(angle - centroid_angle), another.speed * Math.Sin(another.angle - centroid_angle) };
+                if (d_pow < d_pow_min)
+                {
+                    Console.WriteLine("Ball Collide Event!!");
+                    setAngleSpeed(centroid_angle + Math.Atan2(vertical_speed[0], parallel_speed[0]), Math.Sqrt(Math.Pow(parallel_speed[0], 2) + Math.Pow(vertical_speed[0], 2)));
+                    another.setAngleSpeed((speed <= 0)? centroid_angle:(centroid_angle + Math.Atan2(vertical_speed[1], parallel_speed[1])), Math.Sqrt(Math.Pow(parallel_speed[1], 2) + Math.Pow(vertical_speed[1], 2)));
+                }
+            }
+            public void animation(Rectangle poolPanelRec, string name)
+            {
+                if (speed > 0)
+                {
+                    x = x - speed * triFunc[0];
+                    y = y - speed * triFunc[1];
+                    speed -= fr;
+                }
                 collideInterrupt(poolPanelRec);
-                Console.WriteLine("x: " + x + ", y: " + y + ", angle: " + angle);
+                Console.WriteLine("{0}=> x: {1}, y: {2}, angle: {3}, speed: {4}", name, x.ToString("f4"), y.ToString("f4"), angle.ToString("f4"), speed.ToString("f4"));
             }
         }
         class CuePole // define a cue with a length, angle, but the start point is chosen by the ball or user point
@@ -259,15 +283,16 @@ namespace WindowsFormsApplication1
 
         private void poolTimer_tick(object sender, EventArgs e)
         {
-            whiteBall.animation(poolPanelRec);
-            redBall.animation(poolPanelRec);
-            collideFlag = whiteBall.collideInterrupt(redBall, d_pow_min);
+            whiteBall.animation(poolPanelRec, "white");
+            redBall.animation(poolPanelRec, "  red");
+            collideFlag = whiteBall.collideDetect(redBall, d_pow_min);
             poolPanel.Refresh();
+            whiteBall.collideInterrupt(redBall, d_pow_min);
             if (collideFlag & wantToDraw) 
             {
                 poolTimer.Enabled = false;
             }
-            if (whiteBall.speed <= 0)
+            if (whiteBall.speed <= 0 && redBall.speed <= 0)
             {
                 poolTimer.Enabled = false;
                 poolAnimation = false;
