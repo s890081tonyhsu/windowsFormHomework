@@ -41,7 +41,7 @@ namespace WindowsFormsApplication1
                 r = r_i;
                 angle = 0;
                 speed = 0;
-                triFunc = new double[2] { 0, 0};
+                triFunc = new double[2] { 0, 0 };
                 color = color_i;
                 br = new SolidBrush(color);
                 pe = new Pen(br, 3);
@@ -87,7 +87,7 @@ namespace WindowsFormsApplication1
                 angle = hitter.angle;
                 triFunc[0] = Math.Cos(angle);
                 triFunc[1] = Math.Sin(angle);
-                speed = spdHit/40;
+                speed = spdHit / 40;
             }
             public void collideInterrupt(Rectangle poolPanelRec) // wall to ball
             {
@@ -116,18 +116,16 @@ namespace WindowsFormsApplication1
                 }
                 return false;
             }
-            public void collideInterrupt(Ball another, double d_pow_min) // ball to ball
+            public void collideInterrupt(Ball another, bool collideFlag) // ball to ball
             {
-                double d_pow = Math.Pow(x - another.x, 2.0) + Math.Pow(y - another.y, 2.0);
+                if (!collideFlag) return;
                 double centroid_angle = Math.Atan2(another.y - y, another.x - x);
                 double[] parallel_speed = new double[] { another.speed * Math.Cos(another.angle - centroid_angle), speed * Math.Cos(angle - centroid_angle) };
                 double[] vertical_speed = new double[] { speed * Math.Sin(angle - centroid_angle), another.speed * Math.Sin(another.angle - centroid_angle) };
-                if (d_pow < d_pow_min)
-                {
-                    Console.WriteLine("Ball Collide Event!!");
-                    setAngleSpeed(centroid_angle + Math.Atan2(vertical_speed[0], parallel_speed[0]), Math.Sqrt(Math.Pow(parallel_speed[0], 2) + Math.Pow(vertical_speed[0], 2)));
-                    another.setAngleSpeed((speed <= 0)? centroid_angle:(centroid_angle + Math.Atan2(vertical_speed[1], parallel_speed[1])), Math.Sqrt(Math.Pow(parallel_speed[1], 2) + Math.Pow(vertical_speed[1], 2)));
-                }
+                Console.WriteLine("Ball Collide Event!!");
+                setAngleSpeed(centroid_angle + Math.Atan2(vertical_speed[0], parallel_speed[0]), Math.Sqrt(Math.Pow(parallel_speed[0], 2) + Math.Pow(vertical_speed[0], 2)));
+                another.setAngleSpeed((speed <= 0) ? centroid_angle : (centroid_angle + Math.Atan2(vertical_speed[1], parallel_speed[1])), Math.Sqrt(Math.Pow(parallel_speed[1], 2) + Math.Pow(vertical_speed[1], 2)));
+                another.setPos(x + Math.Cos(centroid_angle) * 20, y + Math.Sin(centroid_angle) * 20);// hard fix for some ball sticks
             }
             public void animation(Rectangle poolPanelRec, string name)
             {
@@ -187,7 +185,7 @@ namespace WindowsFormsApplication1
             }
             public void draw_line()
             {
-                g.DrawRectangle(pe, (Int32)(x-2), (Int32)(y-2), 5, 5);
+                g.DrawRectangle(pe, (Int32)(x - 2), (Int32)(y - 2), 5, 5);
             }
             public double angleFromBall(Ball ball)
             {
@@ -250,12 +248,12 @@ namespace WindowsFormsApplication1
             redBall.draw();
             redBall_noBrush.draw_line();
             whiteBall.draw();
-            if (collideFlag) 
+            if (collideFlag)
             {
                 whiteBall.draw_collide_line(wantToDraw);
                 whiteBall.draw_bary_line(redBall, wantToDraw);
             }
-            if(!poolAnimation) playerCue.draw(whiteBall);
+            if (!poolAnimation) playerCue.draw(whiteBall);
             myMouse.draw_line();
             gBuffer.Render(e.Graphics);
         }
@@ -287,8 +285,8 @@ namespace WindowsFormsApplication1
             redBall.animation(poolPanelRec, "  red");
             collideFlag = whiteBall.collideDetect(redBall, d_pow_min);
             poolPanel.Refresh();
-            whiteBall.collideInterrupt(redBall, d_pow_min);
-            if (collideFlag & wantToDraw) 
+            whiteBall.collideInterrupt(redBall, collideFlag);
+            if (collideFlag & wantToDraw)
             {
                 poolTimer.Enabled = false;
             }
@@ -305,7 +303,7 @@ namespace WindowsFormsApplication1
         private void poolPause_Click(object sender, EventArgs e)
         {
             poolTimer.Enabled = (!poolTimer.Enabled & poolAnimation);
-            timePause_button.Text = poolTimer.Enabled? "ポーズ" : "続けます";
+            timePause_button.Text = poolTimer.Enabled ? "ポーズ" : "続けます";
         }
 
         private void powerScroll_Scroll(object sender, ScrollEventArgs e)
