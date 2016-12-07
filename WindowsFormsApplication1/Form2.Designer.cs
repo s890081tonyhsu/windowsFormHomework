@@ -33,6 +33,7 @@
             this.poolBaseTitle = new System.Windows.Forms.Label();
             this.poolBackButton = new System.Windows.Forms.Button();
             this.poolBackPanel = new System.Windows.Forms.Panel();
+            this.ballCollideStop = new System.Windows.Forms.CheckBox();
             this.powerLabel = new System.Windows.Forms.Label();
             this.frictionLabel = new System.Windows.Forms.Label();
             this.frictionScroll = new System.Windows.Forms.HScrollBar();
@@ -42,7 +43,6 @@
             this.whiteBallValue = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.poolTimer = new System.Windows.Forms.Timer(this.components);
-            this.ballCollideStop = new System.Windows.Forms.CheckBox();
             this.poolBackPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -62,7 +62,7 @@
             // 
             this.poolBaseTitle.AutoSize = true;
             this.poolBaseTitle.BackColor = System.Drawing.Color.Transparent;
-            this.poolBaseTitle.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.poolBaseTitle.Font = new System.Drawing.Font("Microsoft JhengHei", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.poolBaseTitle.Location = new System.Drawing.Point(64, 24);
             this.poolBaseTitle.Name = "poolBaseTitle";
             this.poolBaseTitle.Size = new System.Drawing.Size(0, 31);
@@ -70,7 +70,7 @@
             // 
             // poolBackButton
             // 
-            this.poolBackButton.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.poolBackButton.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.poolBackButton.Location = new System.Drawing.Point(808, 16);
             this.poolBackButton.Name = "poolBackButton";
             this.poolBackButton.Size = new System.Drawing.Size(81, 34);
@@ -94,11 +94,22 @@
             this.poolBackPanel.Controls.Add(this.poolPanel);
             this.poolBackPanel.Controls.Add(this.poolBaseTitle);
             this.poolBackPanel.Controls.Add(this.poolBackButton);
-            this.poolBackPanel.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.poolBackPanel.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.poolBackPanel.Location = new System.Drawing.Point(0, 0);
             this.poolBackPanel.Name = "poolBackPanel";
             this.poolBackPanel.Size = new System.Drawing.Size(932, 539);
             this.poolBackPanel.TabIndex = 0;
+            // 
+            // ballCollideStop
+            // 
+            this.ballCollideStop.AutoSize = true;
+            this.ballCollideStop.Location = new System.Drawing.Point(485, 475);
+            this.ballCollideStop.Name = "ballCollideStop";
+            this.ballCollideStop.Size = new System.Drawing.Size(103, 23);
+            this.ballCollideStop.TabIndex = 11;
+            this.ballCollideStop.Text = "撞球時停止";
+            this.ballCollideStop.UseVisualStyleBackColor = true;
+            this.ballCollideStop.CheckedChanged += new System.EventHandler(this.ballCollideStop_CheckedChanged);
             // 
             // powerLabel
             // 
@@ -183,19 +194,8 @@
             // 
             // poolTimer
             // 
-            this.poolTimer.Interval = 25;
+            this.poolTimer.Interval = 8;
             this.poolTimer.Tick += new System.EventHandler(this.poolTimer_tick);
-            // 
-            // ballCollideStop
-            // 
-            this.ballCollideStop.AutoSize = true;
-            this.ballCollideStop.Location = new System.Drawing.Point(485, 475);
-            this.ballCollideStop.Name = "ballCollideStop";
-            this.ballCollideStop.Size = new System.Drawing.Size(103, 23);
-            this.ballCollideStop.TabIndex = 11;
-            this.ballCollideStop.Text = "撞球時停止";
-            this.ballCollideStop.UseVisualStyleBackColor = true;
-            this.ballCollideStop.CheckedChanged += new System.EventHandler(this.ballCollideStop_CheckedChanged);
             // 
             // PoolBase
             // 

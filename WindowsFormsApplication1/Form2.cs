@@ -33,6 +33,7 @@ namespace WindowsFormsApplication1
             public double speed;
             public Color color;
             SolidBrush br;
+            public bool display;
             Pen pe;
             public Ball(int x_i, int y_i, int r_i, Color color_i)
             {
@@ -45,6 +46,7 @@ namespace WindowsFormsApplication1
                 color = color_i;
                 br = new SolidBrush(color);
                 pe = new Pen(br, 3);
+                display = true;
             }
             public void setPos(double x_n, double y_n)
             {
@@ -60,6 +62,7 @@ namespace WindowsFormsApplication1
             }
             public void draw()
             {
+                if(!display) return;
                 g.FillEllipse(br, (Int32)(x - r), (Int32)(y - r), (Int32)(r * 2), (Int32)(r * 2));
             }
             public void draw_line()
@@ -108,7 +111,7 @@ namespace WindowsFormsApplication1
             }
             public bool collideDetect(Ball another, double d_pow_min)
             {
-                double d_pow = Math.Pow(x - another.x, 2.0) + Math.Pow(y - another.y, 2.0);
+                double d_pow = pow2(x - another.x) + pow2(y - another.y);
                 if (d_pow < d_pow_min)
                 {
                     Console.WriteLine("Ball Collide Detected!!");
@@ -123,39 +126,64 @@ namespace WindowsFormsApplication1
                 double[] parallel_speed = new double[] { another.speed * Math.Cos(another.angle - centroid_angle), speed * Math.Cos(angle - centroid_angle) };
                 double[] vertical_speed = new double[] { speed * Math.Sin(angle - centroid_angle), another.speed * Math.Sin(another.angle - centroid_angle) };
                 Console.WriteLine("Ball Collide Event!!");
-                setAngleSpeed(centroid_angle + Math.Atan2(vertical_speed[0], parallel_speed[0]), Math.Sqrt(Math.Pow(parallel_speed[0], 2) + Math.Pow(vertical_speed[0], 2)));
+                setAngleSpeed(centroid_angle + Math.Atan2(vertical_speed[0], parallel_speed[0]), Math.Sqrt(pow2(parallel_speed[0]) + pow2(vertical_speed[0])));
                 another.setAngleSpeed((speed <= 0) ? centroid_angle : (centroid_angle + Math.Atan2(vertical_speed[1], parallel_speed[1])), Math.Sqrt(Math.Pow(parallel_speed[1], 2) + Math.Pow(vertical_speed[1], 2)));
                 another.setPos(x + Math.Cos(centroid_angle) * 20, y + Math.Sin(centroid_angle) * 20);// hard fix for some ball sticks
             }
             public void animation(Rectangle poolPanelRec, string name)
             {
-                if (speed > 0)
+                if (speed >= 1)
                 {
                     x = x - speed * triFunc[0];
                     y = y - speed * triFunc[1];
                     speed -= fr;
+                    if (speed < 1) speed = 0; // stop the ball
                 }
+                else speed = 0; // stop the ball
                 collideInterrupt(poolPanelRec);
                 Console.WriteLine("{0}=> x: {1}, y: {2}, angle: {3}, speed: {4}", name, x.ToString("f4"), y.ToString("f4"), angle.ToString("f4"), speed.ToString("f4"));
             }
+            private double pow2(double d)
+            {
+                return d * d;
+            }
         }
-        class CuePole // define a cue with a length, angle, but the start point is chosen by the ball or user point
+        class CollidePair // define a class for list, which can be a queue for ball collide
+        {
+            public Ball srcBall;
+            public Ball tarBall;
+            public CollidePair(Ball ball1, Ball ball2)
+            {
+                srcBall = ball1;
+                tarBall = ball2;
+            }
+            public void draw_line(bool wantToDraw)
+            {
+                srcBall.draw_collide_line(wantToDraw);
+                srcBall.draw_bary_line(tarBall, wantToDraw);
+            }
+            public void run_Interrupt(bool collideFlag)
+            {
+                srcBall.collideInterrupt(tarBall, collideFlag);
+            }
+        }
+        class CuePole // define a cue with a Length, angle, but the start point is chosen by the ball or user point
         {
             public double angle;
-            public double length;
+            public double Length;
             public Color color;
             Pen pen;
-            public CuePole(double angle_i, int length_i, Color color_i)
+            public CuePole(double angle_i, int Length_i, Color color_i)
             {
                 angle = angle_i;
-                length = length_i;
+                Length = Length_i;
                 color = color_i;
                 pen = new Pen(color, 3);
             }
             public void draw(Ball ball)
             {
                 Point start = new Point((Int32)(ball.x + ball.r * Math.Cos(angle)), (Int32)(ball.y + ball.r * Math.Sin(angle)));
-                Point end = new Point((Int32)(ball.x + ball.r * Math.Cos(angle) + length * Math.Cos(angle)), (Int32)(ball.y + +ball.r * Math.Sin(angle) + length * Math.Sin(angle)));
+                Point end = new Point((Int32)(ball.x + ball.r * Math.Cos(angle) + Length * Math.Cos(angle)), (Int32)(ball.y + +ball.r * Math.Sin(angle) + Length * Math.Sin(angle)));
                 g.DrawLine(pen, start, end);
             }
             public void mouseClick_Angle(double ang)
@@ -194,12 +222,11 @@ namespace WindowsFormsApplication1
                 return Math.Atan2(delta_y, delta_x);
             }
         }
-        private Ball redBall = null;
-        private Ball redBall_noBrush = null;
-        private Ball whiteBall = null;
-        private CuePole playerCue = null;
-        private MousePoint myMouse = null;
-        private Rectangle poolPanelRec = new Rectangle();
+        private Ball[]              balls = new Ball[11];
+        private List<CollidePair>   collideList = new List<CollidePair>();
+        private CuePole             playerCue = null;
+        private MousePoint          myMouse = null;
+        private Rectangle           poolPanelRec = new Rectangle();
         public PoolBase()
         {
             InitializeComponent();
@@ -210,9 +237,8 @@ namespace WindowsFormsApplication1
             wantToDraw = false;
             collideFlag = false;
             d_pow_min = (double)(4 * 10 * 10);
-            redBall = new Ball(300, 300, 10, Color.FromArgb(255, 255, 0, 0));
-            redBall_noBrush = new Ball(100, 100, 10, Color.FromArgb(255, 255, 0, 0));
-            whiteBall = new Ball(100, 100, 10, Color.FromArgb(255, 255, 255, 255));
+            for(int i = 0; i < balls.Length; i++)
+                balls[i] = new Ball(200+30*i, 200, 10, Color.FromArgb(255, (i * 100)%256, (i * 50)%256, (i * 25)%256));
             playerCue = new CuePole(1.5, 100, Color.FromArgb(255, 0, 0, 0));
             myMouse = new MousePoint(-1, -1);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -244,16 +270,16 @@ namespace WindowsFormsApplication1
         private void poolPanel_Paint(object sender, PaintEventArgs e)
         {
             g.Clear(poolPanel.BackColor);
-            redBall_noBrush.setPos(poolPanel.Width / 2, poolPanel.Height / 2);
-            redBall.draw();
-            redBall_noBrush.draw_line();
-            whiteBall.draw();
+            for(int i = 0; i < balls.Length; i++)
+                balls[i].draw();
             if (collideFlag)
             {
-                whiteBall.draw_collide_line(wantToDraw);
-                whiteBall.draw_bary_line(redBall, wantToDraw);
+                collideList.ForEach(delegate(CollidePair pair)
+                {
+                    pair.draw_line(wantToDraw);
+                });
             }
-            if (!poolAnimation) playerCue.draw(whiteBall);
+            if (!poolAnimation) playerCue.draw(balls[10]);
             myMouse.draw_line();
             gBuffer.Render(e.Graphics);
         }
@@ -261,7 +287,7 @@ namespace WindowsFormsApplication1
         private void mouse_click(object sender, MouseEventArgs e)
         {
             myMouse.setPos(e.X, e.Y);
-            playerCue.mouseClick_Angle(myMouse.angleFromBall(whiteBall));
+            playerCue.mouseClick_Angle(myMouse.angleFromBall(balls[10]));
             poolPanel.Refresh();
         }
 
@@ -273,31 +299,43 @@ namespace WindowsFormsApplication1
 
         private void cueFire_button_Click(object sender, EventArgs e)
         {
-            playerCue.mouseClick_Angle(myMouse.angleFromBall(whiteBall));
-            whiteBall.collideInterrupt(playerCue, power);
+            playerCue.mouseClick_Angle(myMouse.angleFromBall(balls[10]));
+            balls[10].collideInterrupt(playerCue, power);
             poolAnimation = true;
             poolTimer.Enabled = true;
         }
 
         private void poolTimer_tick(object sender, EventArgs e)
         {
-            whiteBall.animation(poolPanelRec, "white");
-            redBall.animation(poolPanelRec, "  red");
-            collideFlag = whiteBall.collideDetect(redBall, d_pow_min);
+            double totalSpd = 0;
+            Console.Clear();
+            for(int i = 0; i < balls.Length; i++)
+            {
+                balls[i].animation(poolPanelRec, String.Format("  {0}th", i));
+                totalSpd += balls[i].speed;
+            }
+            for(int i = 0; i < balls.Length - 1; i++)
+                for(int j = i+1; j < balls.Length; j++)
+                    if (balls[i].collideDetect(balls[j], d_pow_min)) collideList.Add(new CollidePair(balls[i], balls[j]));
+            collideFlag = collideList.Count != 0;
             poolPanel.Refresh();
-            whiteBall.collideInterrupt(redBall, collideFlag);
+            collideList.ForEach(delegate(CollidePair pair)
+            {
+                pair.run_Interrupt(collideFlag);
+            });
             if (collideFlag & wantToDraw)
             {
                 poolTimer.Enabled = false;
             }
-            if (whiteBall.speed <= 0 && redBall.speed <= 0)
+            if (totalSpd <= 0)
             {
                 poolTimer.Enabled = false;
                 poolAnimation = false;
             }
             cueFire_button.Visible = !poolAnimation;
             timePause_button.Visible = poolAnimation;
-            whiteBallValue.Text = "Spd: " + whiteBall.speed;
+            whiteBallValue.Text = "Spd: " + balls[10].speed;
+            collideList.Clear();
         }
 
         private void poolPause_Click(object sender, EventArgs e)
