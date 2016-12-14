@@ -33,6 +33,7 @@
             this.poolBaseTitle = new System.Windows.Forms.Label();
             this.poolBackButton = new System.Windows.Forms.Button();
             this.poolBackPanel = new System.Windows.Forms.Panel();
+            this.poolClearLabel = new System.Windows.Forms.Label();
             this.ballCollideStop = new System.Windows.Forms.CheckBox();
             this.powerLabel = new System.Windows.Forms.Label();
             this.frictionLabel = new System.Windows.Forms.Label();
@@ -40,7 +41,7 @@
             this.powerScroll = new System.Windows.Forms.VScrollBar();
             this.timePause_button = new System.Windows.Forms.Button();
             this.cueFire_button = new System.Windows.Forms.Button();
-            this.whiteBallValue = new System.Windows.Forms.Label();
+            this.timerTickLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.poolTimer = new System.Windows.Forms.Timer(this.components);
             this.poolBackPanel.SuspendLayout();
@@ -82,6 +83,7 @@
             // poolBackPanel
             // 
             this.poolBackPanel.BackColor = System.Drawing.Color.Transparent;
+            this.poolBackPanel.Controls.Add(this.poolClearLabel);
             this.poolBackPanel.Controls.Add(this.ballCollideStop);
             this.poolBackPanel.Controls.Add(this.powerLabel);
             this.poolBackPanel.Controls.Add(this.frictionLabel);
@@ -89,7 +91,7 @@
             this.poolBackPanel.Controls.Add(this.powerScroll);
             this.poolBackPanel.Controls.Add(this.timePause_button);
             this.poolBackPanel.Controls.Add(this.cueFire_button);
-            this.poolBackPanel.Controls.Add(this.whiteBallValue);
+            this.poolBackPanel.Controls.Add(this.timerTickLabel);
             this.poolBackPanel.Controls.Add(this.pictureBox1);
             this.poolBackPanel.Controls.Add(this.poolPanel);
             this.poolBackPanel.Controls.Add(this.poolBaseTitle);
@@ -99,6 +101,15 @@
             this.poolBackPanel.Name = "poolBackPanel";
             this.poolBackPanel.Size = new System.Drawing.Size(932, 539);
             this.poolBackPanel.TabIndex = 0;
+            // 
+            // poolClearLabel
+            // 
+            this.poolClearLabel.AutoSize = true;
+            this.poolClearLabel.Location = new System.Drawing.Point(617, 31);
+            this.poolClearLabel.Name = "poolClearLabel";
+            this.poolClearLabel.Size = new System.Drawing.Size(51, 19);
+            this.poolClearLabel.TabIndex = 12;
+            this.poolClearLabel.Text = "label1";
             // 
             // ballCollideStop
             // 
@@ -160,7 +171,6 @@
             this.timePause_button.TabIndex = 6;
             this.timePause_button.Text = "ポーズ";
             this.timePause_button.UseVisualStyleBackColor = true;
-            this.timePause_button.Visible = false;
             this.timePause_button.Click += new System.EventHandler(this.poolPause_Click);
             // 
             // cueFire_button
@@ -173,14 +183,14 @@
             this.cueFire_button.UseVisualStyleBackColor = true;
             this.cueFire_button.Click += new System.EventHandler(this.cueFire_button_Click);
             // 
-            // whiteBallValue
+            // timerTickLabel
             // 
-            this.whiteBallValue.AutoSize = true;
-            this.whiteBallValue.Location = new System.Drawing.Point(481, 31);
-            this.whiteBallValue.Name = "whiteBallValue";
-            this.whiteBallValue.Size = new System.Drawing.Size(51, 19);
-            this.whiteBallValue.TabIndex = 4;
-            this.whiteBallValue.Text = "label1";
+            this.timerTickLabel.AutoSize = true;
+            this.timerTickLabel.Location = new System.Drawing.Point(481, 31);
+            this.timerTickLabel.Name = "timerTickLabel";
+            this.timerTickLabel.Size = new System.Drawing.Size(51, 19);
+            this.timerTickLabel.TabIndex = 4;
+            this.timerTickLabel.Text = "label1";
             // 
             // pictureBox1
             // 
@@ -222,7 +232,7 @@
         private System.Windows.Forms.Button poolBackButton;
         private System.Windows.Forms.Panel poolBackPanel;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label whiteBallValue;
+        private System.Windows.Forms.Label timerTickLabel;
         private System.Windows.Forms.Button cueFire_button;
         private System.Windows.Forms.Timer poolTimer;
         private System.Windows.Forms.Button timePause_button;
@@ -231,5 +241,6 @@
         private System.Windows.Forms.Label frictionLabel;
         private System.Windows.Forms.Label powerLabel;
         private System.Windows.Forms.CheckBox ballCollideStop;
+        private System.Windows.Forms.Label poolClearLabel;
     }
 }

@@ -23,6 +23,8 @@ namespace WindowsFormsApplication1
         public bool poolAnimation;
         public bool wantToDraw;
         public bool collideFlag;
+        public int timerTickVal = 0;
+        public int poolClearVal = 0;
         class Ball // define a ball with a position, color and have painter self to draw
         {
             public double x;
@@ -114,7 +116,7 @@ namespace WindowsFormsApplication1
                 double d_pow = pow2(x - another.x) + pow2(y - another.y);
                 if (d_pow < d_pow_min)
                 {
-                    Console.WriteLine("Ball Collide Detected!!");
+                    // Console.WriteLine("Ball Collide Detected!!");
                     return true;
                 }
                 return false;
@@ -125,7 +127,7 @@ namespace WindowsFormsApplication1
                 double centroid_angle = Math.Atan2(another.y - y, another.x - x);
                 double[] parallel_speed = new double[] { another.speed * Math.Cos(another.angle - centroid_angle), speed * Math.Cos(angle - centroid_angle) };
                 double[] vertical_speed = new double[] { speed * Math.Sin(angle - centroid_angle), another.speed * Math.Sin(another.angle - centroid_angle) };
-                Console.WriteLine("Ball Collide Event!!");
+                // Console.WriteLine("Ball Collide Event!!");
                 setAngleSpeed(centroid_angle + Math.Atan2(vertical_speed[0], parallel_speed[0]), Math.Sqrt(pow2(parallel_speed[0]) + pow2(vertical_speed[0])));
                 another.setAngleSpeed((speed <= 0) ? centroid_angle : (centroid_angle + Math.Atan2(vertical_speed[1], parallel_speed[1])), Math.Sqrt(Math.Pow(parallel_speed[1], 2) + Math.Pow(vertical_speed[1], 2)));
                 another.setPos(x + Math.Cos(centroid_angle) * 20, y + Math.Sin(centroid_angle) * 20);// hard fix for some ball sticks
@@ -141,7 +143,7 @@ namespace WindowsFormsApplication1
                 }
                 else speed = 0; // stop the ball
                 collideInterrupt(poolPanelRec);
-                Console.WriteLine("{0}=> x: {1}, y: {2}, angle: {3}, speed: {4}", name, x.ToString("f4"), y.ToString("f4"), angle.ToString("f4"), speed.ToString("f4"));
+                // Console.WriteLine("{0}=> x: {1}, y: {2}, angle: {3}, speed: {4}", name, x.ToString("f4"), y.ToString("f4"), angle.ToString("f4"), speed.ToString("f4"));
             }
             private double pow2(double d)
             {
@@ -254,12 +256,12 @@ namespace WindowsFormsApplication1
         {
             string account = login.accountName;
             poolBaseTitle.Text = "你好阿，旅行者" + account;
-            AllocConsole();
+            // AllocConsole();
         }
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AllocConsole();
+        // [DllImport("kernel32.dll", SetLastError = true)]
+        // [return: MarshalAs(UnmanagedType.Bool)]
+        // static extern bool AllocConsole();
 
         private void poolBackButton_Click(object sender, EventArgs e)
         {
@@ -269,6 +271,7 @@ namespace WindowsFormsApplication1
 
         private void poolPanel_Paint(object sender, PaintEventArgs e)
         {
+            poolClearVal += 1;
             g.Clear(poolPanel.BackColor);
             for(int i = 0; i < balls.Length; i++)
                 balls[i].draw();
@@ -307,8 +310,9 @@ namespace WindowsFormsApplication1
 
         private void poolTimer_tick(object sender, EventArgs e)
         {
+            timerTickVal += 1;
             double totalSpd = 0;
-            Console.Clear();
+            // Console.Clear();
             for(int i = 0; i < balls.Length; i++)
             {
                 balls[i].animation(poolPanelRec, String.Format("  {0}th", i));
@@ -332,9 +336,10 @@ namespace WindowsFormsApplication1
                 poolTimer.Enabled = false;
                 poolAnimation = false;
             }
-            cueFire_button.Visible = !poolAnimation;
-            timePause_button.Visible = poolAnimation;
-            whiteBallValue.Text = "Spd: " + balls[10].speed;
+            // cueFire_button.Visible = !poolAnimation;
+            // timePause_button.Visible = poolAnimation;
+            // timerTickLabel.Text = timerTickVal.ToString();
+            // poolClearLabel.Text = poolClearVal.ToString();
             collideList.Clear();
         }
 
