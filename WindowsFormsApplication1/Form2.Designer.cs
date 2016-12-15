@@ -1,5 +1,16 @@
 ﻿namespace WindowsFormsApplication1
 {
+    public class MyPanel : System.Windows.Forms.Panel
+    {
+        public MyPanel()
+        {
+            this.SetStyle(
+                System.Windows.Forms.ControlStyles.UserPaint |
+                System.Windows.Forms.ControlStyles.AllPaintingInWmPaint |
+                System.Windows.Forms.ControlStyles.OptimizedDoubleBuffer,
+                true);
+        }
+    }
     partial class PoolBase
     {
         /// <summary>
@@ -29,11 +40,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.poolPanel = new System.Windows.Forms.Panel();
+            this.poolPanel = new MyPanel();
             this.poolBaseTitle = new System.Windows.Forms.Label();
             this.poolBackButton = new System.Windows.Forms.Button();
-            this.poolBackPanel = new System.Windows.Forms.Panel();
-            this.ballCollideStop = new System.Windows.Forms.CheckBox();
             this.powerLabel = new System.Windows.Forms.Label();
             this.frictionLabel = new System.Windows.Forms.Label();
             this.frictionScroll = new System.Windows.Forms.HScrollBar();
@@ -43,7 +52,7 @@
             this.whiteBallValue = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.poolTimer = new System.Windows.Forms.Timer(this.components);
-            this.poolBackPanel.SuspendLayout();
+            this.ballCollideStop = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,7 +60,7 @@
             // 
             this.poolPanel.BackColor = System.Drawing.Color.Green;
             this.poolPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.poolPanel.Location = new System.Drawing.Point(16, 72);
+            this.poolPanel.Location = new System.Drawing.Point(28, 60);
             this.poolPanel.Name = "poolPanel";
             this.poolPanel.Size = new System.Drawing.Size(783, 384);
             this.poolPanel.TabIndex = 0;
@@ -62,16 +71,16 @@
             // 
             this.poolBaseTitle.AutoSize = true;
             this.poolBaseTitle.BackColor = System.Drawing.Color.Transparent;
-            this.poolBaseTitle.Font = new System.Drawing.Font("Microsoft JhengHei", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.poolBaseTitle.Location = new System.Drawing.Point(64, 24);
+            this.poolBaseTitle.Font = new System.Drawing.Font("微軟正黑體", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.poolBaseTitle.Location = new System.Drawing.Point(90, 23);
             this.poolBaseTitle.Name = "poolBaseTitle";
             this.poolBaseTitle.Size = new System.Drawing.Size(0, 31);
             this.poolBaseTitle.TabIndex = 1;
             // 
             // poolBackButton
             // 
-            this.poolBackButton.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.poolBackButton.Location = new System.Drawing.Point(808, 16);
+            this.poolBackButton.Font = new System.Drawing.Font("微軟正黑體", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.poolBackButton.Location = new System.Drawing.Point(819, 12);
             this.poolBackButton.Name = "poolBackButton";
             this.poolBackButton.Size = new System.Drawing.Size(81, 34);
             this.poolBackButton.TabIndex = 2;
@@ -79,59 +88,27 @@
             this.poolBackButton.UseVisualStyleBackColor = true;
             this.poolBackButton.Click += new System.EventHandler(this.poolBackButton_Click);
             // 
-            // poolBackPanel
-            // 
-            this.poolBackPanel.BackColor = System.Drawing.Color.Transparent;
-            this.poolBackPanel.Controls.Add(this.ballCollideStop);
-            this.poolBackPanel.Controls.Add(this.powerLabel);
-            this.poolBackPanel.Controls.Add(this.frictionLabel);
-            this.poolBackPanel.Controls.Add(this.frictionScroll);
-            this.poolBackPanel.Controls.Add(this.powerScroll);
-            this.poolBackPanel.Controls.Add(this.timePause_button);
-            this.poolBackPanel.Controls.Add(this.cueFire_button);
-            this.poolBackPanel.Controls.Add(this.whiteBallValue);
-            this.poolBackPanel.Controls.Add(this.pictureBox1);
-            this.poolBackPanel.Controls.Add(this.poolPanel);
-            this.poolBackPanel.Controls.Add(this.poolBaseTitle);
-            this.poolBackPanel.Controls.Add(this.poolBackButton);
-            this.poolBackPanel.Font = new System.Drawing.Font("Microsoft JhengHei", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.poolBackPanel.Location = new System.Drawing.Point(0, 0);
-            this.poolBackPanel.Name = "poolBackPanel";
-            this.poolBackPanel.Size = new System.Drawing.Size(932, 539);
-            this.poolBackPanel.TabIndex = 0;
-            // 
-            // ballCollideStop
-            // 
-            this.ballCollideStop.AutoSize = true;
-            this.ballCollideStop.Location = new System.Drawing.Point(485, 475);
-            this.ballCollideStop.Name = "ballCollideStop";
-            this.ballCollideStop.Size = new System.Drawing.Size(103, 23);
-            this.ballCollideStop.TabIndex = 11;
-            this.ballCollideStop.Text = "撞球時停止";
-            this.ballCollideStop.UseVisualStyleBackColor = true;
-            this.ballCollideStop.CheckedChanged += new System.EventHandler(this.ballCollideStop_CheckedChanged);
-            // 
             // powerLabel
             // 
             this.powerLabel.AutoSize = true;
-            this.powerLabel.Location = new System.Drawing.Point(808, 72);
+            this.powerLabel.Location = new System.Drawing.Point(817, 61);
             this.powerLabel.Name = "powerLabel";
-            this.powerLabel.Size = new System.Drawing.Size(54, 19);
+            this.powerLabel.Size = new System.Drawing.Size(41, 12);
             this.powerLabel.TabIndex = 10;
             this.powerLabel.Text = "施力：";
             // 
             // frictionLabel
             // 
             this.frictionLabel.AutoSize = true;
-            this.frictionLabel.Location = new System.Drawing.Point(27, 505);
+            this.frictionLabel.Location = new System.Drawing.Point(37, 468);
             this.frictionLabel.Name = "frictionLabel";
-            this.frictionLabel.Size = new System.Drawing.Size(69, 19);
+            this.frictionLabel.Size = new System.Drawing.Size(53, 12);
             this.frictionLabel.TabIndex = 9;
             this.frictionLabel.Text = "摩擦力：";
             // 
             // frictionScroll
             // 
-            this.frictionScroll.Location = new System.Drawing.Point(16, 475);
+            this.frictionScroll.Location = new System.Drawing.Point(39, 490);
             this.frictionScroll.Maximum = 159;
             this.frictionScroll.Minimum = 1;
             this.frictionScroll.Name = "frictionScroll";
@@ -142,7 +119,7 @@
             // 
             // powerScroll
             // 
-            this.powerScroll.Location = new System.Drawing.Point(869, 62);
+            this.powerScroll.Location = new System.Drawing.Point(887, 61);
             this.powerScroll.Maximum = 159;
             this.powerScroll.Minimum = 1;
             this.powerScroll.Name = "powerScroll";
@@ -153,7 +130,7 @@
             // 
             // timePause_button
             // 
-            this.timePause_button.Location = new System.Drawing.Point(703, 470);
+            this.timePause_button.Location = new System.Drawing.Point(726, 490);
             this.timePause_button.Name = "timePause_button";
             this.timePause_button.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.timePause_button.Size = new System.Drawing.Size(96, 31);
@@ -165,7 +142,7 @@
             // 
             // cueFire_button
             // 
-            this.cueFire_button.Location = new System.Drawing.Point(596, 470);
+            this.cueFire_button.Location = new System.Drawing.Point(614, 490);
             this.cueFire_button.Name = "cueFire_button";
             this.cueFire_button.Size = new System.Drawing.Size(96, 31);
             this.cueFire_button.TabIndex = 5;
@@ -176,9 +153,9 @@
             // whiteBallValue
             // 
             this.whiteBallValue.AutoSize = true;
-            this.whiteBallValue.Location = new System.Drawing.Point(481, 31);
+            this.whiteBallValue.Location = new System.Drawing.Point(125, 32);
             this.whiteBallValue.Name = "whiteBallValue";
-            this.whiteBallValue.Size = new System.Drawing.Size(51, 19);
+            this.whiteBallValue.Size = new System.Drawing.Size(33, 12);
             this.whiteBallValue.TabIndex = 4;
             this.whiteBallValue.Text = "label1";
             // 
@@ -186,7 +163,7 @@
             // 
             this.pictureBox1.Image = global::WindowsFormsApplication1.Properties.Resources._1f600;
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(31, 26);
+            this.pictureBox1.Location = new System.Drawing.Point(39, 28);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(25, 26);
             this.pictureBox1.TabIndex = 3;
@@ -197,30 +174,50 @@
             this.poolTimer.Interval = 8;
             this.poolTimer.Tick += new System.EventHandler(this.poolTimer_tick);
             // 
+            // ballCollideStop
+            // 
+            this.ballCollideStop.AutoSize = true;
+            this.ballCollideStop.Location = new System.Drawing.Point(614, 468);
+            this.ballCollideStop.Name = "ballCollideStop";
+            this.ballCollideStop.Size = new System.Drawing.Size(84, 16);
+            this.ballCollideStop.TabIndex = 11;
+            this.ballCollideStop.Text = "撞球時停止";
+            this.ballCollideStop.UseVisualStyleBackColor = true;
+            this.ballCollideStop.CheckedChanged += new System.EventHandler(this.ballCollideStop_CheckedChanged);
+            // 
             // PoolBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::WindowsFormsApplication1.Properties.Resources._35239_hyperdimension_neptunia;
             this.ClientSize = new System.Drawing.Size(927, 533);
-            this.Controls.Add(this.poolBackPanel);
+            this.Controls.Add(this.cueFire_button);
+            this.Controls.Add(this.timePause_button);
+            this.Controls.Add(this.powerScroll);
+            this.Controls.Add(this.powerLabel);
+            this.Controls.Add(this.ballCollideStop);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.poolBackButton);
+            this.Controls.Add(this.frictionScroll);
+            this.Controls.Add(this.frictionLabel);
+            this.Controls.Add(this.poolBaseTitle);
+            this.Controls.Add(this.poolPanel);
+            this.Controls.Add(this.whiteBallValue);
             this.Name = "PoolBase";
             this.Text = "撞球館";
             this.Load += new System.EventHandler(this.PoolBase_Load);
             this.Resize += new System.EventHandler(this.Form2_Resize);
-            this.poolBackPanel.ResumeLayout(false);
-            this.poolBackPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel poolPanel;
+        private MyPanel poolPanel;
         private System.Windows.Forms.Label poolBaseTitle;
         private System.Windows.Forms.Button poolBackButton;
-        private System.Windows.Forms.Panel poolBackPanel;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label whiteBallValue;
         private System.Windows.Forms.Button cueFire_button;
