@@ -20,13 +20,17 @@ namespace WindowsFormsApplication1
         public static double power = 600;
         public static double fr = 0.4;
         public double d_pow_min = 0;
+        public double ballin = 0;
         public bool poolAnimation;
         public bool wantToDraw;
         public bool collideFlag;
         class Ball // define a ball with a position, color and have painter self to draw
         {
+            public int name;
             public double x;
             public double y;
+            private double x_h;
+            private double y_h;
             public double r;
             public double angle;
             public double[] triFunc;
@@ -35,10 +39,13 @@ namespace WindowsFormsApplication1
             SolidBrush br;
             public bool display;
             Pen pe;
-            public Ball(int x_i, int y_i, int r_i, Color color_i)
+            public Ball(int x_i, int y_i, int r_i, Color color_i, int name_i)
             {
+                name = name_i;
                 x = x_i;
                 y = y_i;
+                x_h = -1 * x_i;
+                y_h = y_i;
                 r = r_i;
                 angle = 0;
                 speed = 0;
@@ -92,8 +99,27 @@ namespace WindowsFormsApplication1
                 triFunc[1] = Math.Sin(angle);
                 speed = spdHit / 40;
             }
-            public void collideInterrupt(Rectangle poolPanelRec) // wall to ball
+            public int collideInterrupt(Rectangle poolPanelRec) // wall to ball
             {
+                int ballin = 0;
+                if (y < 2 * r || y > poolPanelRec.Height - 2 * r)
+                {
+                    if(x <= 2 * r || (x >= (poolPanelRec.Width / 2 - 2 * r) && x <= (poolPanelRec.Width / 2 + 2 * r)) || x >= (poolPanelRec.Width - 2 * r))
+                    {
+                        ballin += (name != 10? 1 : -1);
+                        display = false;
+                        x = x_h;
+                        y = y_h;
+                        speed = 0;
+                    }
+                    else if (y < r || y > poolPanelRec.Height - r)
+                    {
+                        angle = -angle;
+                        y = (y < r) ? (-y + 2 * r) : (-y + 2 * (poolPanelRec.Height - r));
+                        triFunc[0] = Math.Cos(angle);
+                        triFunc[1] = Math.Sin(angle);
+                    }
+                }
                 if (x < r || x > poolPanelRec.Width - r)
                 {
                     angle = Math.PI - angle;
@@ -101,13 +127,7 @@ namespace WindowsFormsApplication1
                     triFunc[0] = Math.Cos(angle);
                     triFunc[1] = Math.Sin(angle);
                 }
-                if (y < r || y > poolPanelRec.Height - r)
-                {
-                    angle = -angle;
-                    y = (y < r) ? (-y + 2 * r) : (-y + 2 * (poolPanelRec.Height - r));
-                    triFunc[0] = Math.Cos(angle);
-                    triFunc[1] = Math.Sin(angle);
-                }
+                return ballin;
             }
             public bool collideDetect(Ball another, double d_pow_min)
             {
@@ -130,8 +150,9 @@ namespace WindowsFormsApplication1
                 another.setAngleSpeed((speed <= 0) ? centroid_angle : (centroid_angle + Math.Atan2(vertical_speed[1], parallel_speed[1])), Math.Sqrt(Math.Pow(parallel_speed[1], 2) + Math.Pow(vertical_speed[1], 2)));
                 another.setPos(x + Math.Cos(centroid_angle) * 20, y + Math.Sin(centroid_angle) * 20);// hard fix for some ball sticks
             }
-            public void animation(Rectangle poolPanelRec, string name)
+            public int animation(Rectangle poolPanelRec)
             {
+                int ballin;
                 if (speed >= 1)
                 {
                     x = x - speed * triFunc[0];
@@ -140,8 +161,9 @@ namespace WindowsFormsApplication1
                     if (speed < 1) speed = 0; // stop the ball
                 }
                 else speed = 0; // stop the ball
-                collideInterrupt(poolPanelRec);
-                Console.WriteLine("{0}=> x: {1}, y: {2}, angle: {3}, speed: {4}", name, x.ToString("f4"), y.ToString("f4"), angle.ToString("f4"), speed.ToString("f4"));
+                ballin = collideInterrupt(poolPanelRec);
+                Console.WriteLine("{0}=> x: {1}, y: {2}, angle: {3}, speed: {4}", name.ToString(), x.ToString("f4"), y.ToString("f4"), angle.ToString("f4"), speed.ToString("f4"));
+                return ballin;
             }
             private double pow2(double d)
             {
@@ -238,14 +260,14 @@ namespace WindowsFormsApplication1
             collideFlag = false;
             d_pow_min = (double)(4 * 10 * 10);
             for(int i = 0; i < balls.Length; i++)
-                balls[i] = new Ball(200+30*i, 200, 10, Color.FromArgb(255, (i * 100)%256, (i * 50)%256, (i * 25)%256));
+                balls[i] = new Ball(200+30*i, 200, 10, Color.FromArgb(255, (i * 100)%256, (i * 50)%256, (i * 25)%256), i);
             playerCue = new CuePole(1.5, 100, Color.FromArgb(255, 0, 0, 0));
             myMouse = new MousePoint(-1, -1);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             AllowTransparency = true;
             poolPanelRec = new Rectangle(0, 0, poolPanel.Width, poolPanel.Height);
             Color bgCover = Color.FromArgb(150, 255, 255, 255);
-            this.poolBackPanel.BackColor = bgCover;
+            // this.poolBackPanel.BackColor = bgCover;
             powerLabel.Text = "施力：\n" + power;
             frictionLabel.Text = "摩擦力：" + fr;
         }
@@ -269,6 +291,7 @@ namespace WindowsFormsApplication1
 
         private void poolPanel_Paint(object sender, PaintEventArgs e)
         {
+            int width = this.poolPanel.Width, height = this.poolPanel.Height, rh = 25;
             g.Clear(poolPanel.BackColor);
             for(int i = 0; i < balls.Length; i++)
                 balls[i].draw();
@@ -279,7 +302,13 @@ namespace WindowsFormsApplication1
                     pair.draw_line(wantToDraw);
                 });
             }
-            if (!poolAnimation) playerCue.draw(balls[10]);
+            g.FillEllipse(Brushes.Black, -rh, -rh, 2 * rh, 2 * rh);
+            g.FillEllipse(Brushes.Black, -rh, -rh + height, 2 * rh, 2 * rh);
+            g.FillEllipse(Brushes.Black, -rh + width/2, -rh, 2 * rh, 2 * rh);
+            g.FillEllipse(Brushes.Black, -rh + width/2, -rh + height, 2 * rh, 2 * rh);
+            g.FillEllipse(Brushes.Black, -rh + width, -rh, 2 * rh, 2 * rh);
+            g.FillEllipse(Brushes.Black, -rh + width, -rh + height, 2 * rh, 2 * rh);
+            if (!poolAnimation & balls[10].display) playerCue.draw(balls[10]);
             myMouse.draw_line();
             gBuffer.Render(e.Graphics);
         }
@@ -293,8 +322,8 @@ namespace WindowsFormsApplication1
 
         private void Form2_Resize(object sender, EventArgs e)
         {
-            poolBackPanel.Width = ClientRectangle.Width + 10;
-            poolBackPanel.Height = ClientRectangle.Height + 10;
+            // poolBackPanel.Width = ClientRectangle.Width + 10;
+            // poolBackPanel.Height = ClientRectangle.Height + 10;
         }
 
         private void cueFire_button_Click(object sender, EventArgs e)
@@ -311,7 +340,7 @@ namespace WindowsFormsApplication1
             Console.Clear();
             for(int i = 0; i < balls.Length; i++)
             {
-                balls[i].animation(poolPanelRec, String.Format("  {0}th", i));
+                ballin += balls[i].animation(poolPanelRec);
                 totalSpd += balls[i].speed;
             }
             for(int i = 0; i < balls.Length - 1; i++)
@@ -332,10 +361,11 @@ namespace WindowsFormsApplication1
                 poolTimer.Enabled = false;
                 poolAnimation = false;
             }
-            cueFire_button.Visible = !poolAnimation;
-            timePause_button.Visible = poolAnimation;
-            whiteBallValue.Text = "Spd: " + balls[10].speed;
+            cueFire_button.Visible = !poolAnimation & balls[10].display;
+            timePause_button.Visible = poolAnimation & balls[10].display;
+            restart_button.Visible = !balls[10].display;
             collideList.Clear();
+            scoreLabel.Text = "分數: "+ballin.ToString();
         }
 
         private void poolPause_Click(object sender, EventArgs e)
@@ -359,6 +389,17 @@ namespace WindowsFormsApplication1
         private void ballCollideStop_CheckedChanged(object sender, EventArgs e)
         {
             wantToDraw = ballCollideStop.Checked;
+        }
+
+        private void restart_button_Click(object sender, EventArgs e)
+        {
+            balls[10].x = myMouse.x;
+            balls[10].y = myMouse.y;
+            balls[10].display = true;
+            cueFire_button.Visible = !poolAnimation & balls[10].display;
+            timePause_button.Visible = poolAnimation & balls[10].display;
+            restart_button.Visible = !balls[10].display;
+            poolPanel.Refresh();
         }
     }
 }
